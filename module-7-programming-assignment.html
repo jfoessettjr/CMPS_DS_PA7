@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 7 Programming Assignment</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the no prototype approach.
+//       This is what the book uses, so you can copy it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//-----------//
+// Recursion //
+//-----------//
+console.log("Recursion");
+
+// 1. Implement fibonnacci using a recursive function and test your code.
+
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Test the function
+const n = 10; // Change this value to calculate a different Fibonacci number
+for (let i = 0; i < n; i++) {
+  console.log(`Fibonacci(${i}) = ${fibonacci(i)}`);
+}
+
+//---------------------//
+// Dynamic programming //
+//---------------------//
+console.log("Dynamic programming");
+
+// 1. Implement the minimum coin change problem using dynamic programming.
+//    Test your code.
+
+function minCoins(coins, target) {
+  // Create an array to store the minimum number of coins needed for each amount from 0 to target.
+  const dp = new Array(target + 1).fill(Infinity);
+
+  // We need 0 coins to make change for 0.
+  dp[0] = 0;
+
+  // Calculate the minimum number of coins for each amount from 1 to target.
+  for (let amount = 1; amount <= target; amount++) {
+    for (const coin of coins) {
+      if (coin <= amount) {
+        dp[amount] = Math.min(dp[amount], dp[amount - coin] + 1);
+      }
+    }
+  }
+
+  // The final result is stored in dp[target].
+  return dp[target] === Infinity ? -1 : dp[target];
+}
+
+// Test the function
+const coins = [1, 2, 5];
+const target = 11;
+
+const minCoinCount = minCoins(coins, target);
+if (minCoinCount === -1) {
+  console.log("It's not possible to make change for the given target.");
+} else {
+  console.log(`Minimum number of coins to make change for ${target}: ${minCoinCount}`);
+}
+
+//-------------------//
+// Greedy algorithms //
+//-------------------//
+console.log("Greedy algorithms");
+
+// 1. Implement the minimum coin change problem using a greedy algorithm.
+//    Test your code.
+
+function greedyCoinChange(coins, target) {
+  coins.sort((a, b) => b - a); // Sort coins in descending order
+  const change = {};
+
+  for (const coin of coins) {
+    while (target >= coin) {
+      if (change[coin]) {
+        change[coin]++;
+      } else {
+        change[coin] = 1;
+      }
+      target -= coin;
+    }
+  }
+
+  if (target === 0) {
+    return change;
+  } else {
+    return "Change cannot be made with the given coins.";
+  }
+}
+
+// Test the function
+const usCoins = [25, 10, 5, 1]; // U.S. coin denominations (quarters, dimes, nickels, and pennies)
+const targetAmount = 73;
+
+const change = greedyCoinChange(usCoins, targetAmount);
+
+if (typeof change === "object") {
+  console.log("Change for", targetAmount, "cents:");
+  for (const coin in change) {
+    console.log(coin, "cents:", change[coin]);
+  }
+} else {
+  console.log(change);
+}
+
+//----------------------------------------//
+// Introduction to functional programming //
+//----------------------------------------//
+console.log("Introduction to functional programming");
+
+// 1. Solve the problem of obtaining all the positive numbers in an array using
+//    imperative style.
+
+function getPositiveNumbers(arr) {
+  const positiveNumbers = [];
+  
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > 0) {
+      positiveNumbers.push(arr[i]);
+    }
+  }
+  
+  return positiveNumbers;
+}
+
+// Test the function
+const numbers = [-2, 4, -7, 8, 0, 12, -5];
+const positiveNumbers = getPositiveNumbers(numbers);
+console.log("Positive Numbers:", positiveNumbers);
+
+// 2. Solve the problem of obtaining all the positive numbers in an array using
+//    functional style.
+
+function getPositiveNumbers(arr) {
+  return arr.filter(number => number > 0);
+}
+
+// Test the function
+const numbers2 = [-2, 4, -7, 8, 0, 12, -5];
+const positiveNumbers2 = getPositiveNumbers(numbers2);
+console.log("Positive Numbers:", positiveNumbers2);
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
